@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  latex:
+    image: texlive/texlive
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
