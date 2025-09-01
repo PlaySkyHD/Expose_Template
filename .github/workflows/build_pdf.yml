@@ -1,0 +1,34 @@
+name: Build PDF
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build_latex:
+    runs-on: ubuntu-24.04
+
+    steps:
+    - name: Set up Git repository
+      uses: actions/checkout@v4
+
+    - name: Set Permissions
+      run: chmod 777 compile.sh
+
+    - name: Compile LaTeX document (German)
+      uses: xu-cheng/texlive-action@v2
+      with:
+        texlive_version: 2024
+        run: |
+          ./compile.sh
+
+    - name: Create Tag
+      uses: rickstaa/action-create-tag@v1.7.2
+      with:
+        tag: ${{ github.run_number }}
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: thesis_main.pdf
+        tag_name: ${{ github.run_number }}
